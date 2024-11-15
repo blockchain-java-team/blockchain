@@ -9,7 +9,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class EnsaChainTest {
 
     @Test
-    void hash() {
+    void hash1() {
         assertEquals(123, new EnsaChain().hash());
+    }
+
+    @Test
+    void hash_test_getting_hash() {
+        EnsaChain e = new EnsaChain();
+        assertEquals(0, e.getNum());
     }
 }
