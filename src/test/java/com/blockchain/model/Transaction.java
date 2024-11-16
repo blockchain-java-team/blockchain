@@ -13,22 +13,27 @@ import java.util.Base64;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
-@Setter
-
 public class Transaction implements Serializable {
 
+    @Setter
     private byte[] from;
     private String fromFX;
+
+    @Setter
     private byte[] to;
     private String toFX;
+
+    @Setter
     private Integer value;
+
     private String timestamp;
+
     private byte[] signature;
     private  String signatureFX;
-    private Integer ledgerId;
 
+    @Setter
+    private Integer ledgerId;
 
     //Constructor for loading with existing signature
     public Transaction(
