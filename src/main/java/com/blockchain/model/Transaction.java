@@ -1,10 +1,8 @@
 package com.blockchain.model;
 
-
-
 import sun.security.provider.DSAPublicKeyImpl;
 
-import java.io.Serializable;
+
 import java.security.InvalidKeyException;
 import java.security.Signature;
 import java.security.SignatureException;
@@ -15,22 +13,27 @@ import java.util.Base64;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Getter
-@Setter
+public class Transaction {
 
-public class Transaction implements Serializable {
-
+    @Setter
     private byte[] from;
     private String fromFX;
+
+    @Setter
     private byte[] to;
     private String toFX;
+
+    @Setter
     private Integer value;
+
     private String timestamp;
+
     private byte[] signature;
     private  String signatureFX;
-    private Integer ledgerId;
 
+    @Setter
+    private Integer ledgerId;
 
     //Constructor for loading with existing signature
     public Transaction(
@@ -75,9 +78,8 @@ public class Transaction implements Serializable {
         this.signatureFX = encoder.encodeToString(this.signature);
     }
 
-    public Boolean isVerified(
-            Signature signing
-    ) throws InvalidKeyException, SignatureException {
+    public Boolean isVerified(Signature signing)
+            throws InvalidKeyException, SignatureException {
         signing.initVerify(new DSAPublicKeyImpl(this.getFrom()));
         signing.update(this.toString().getBytes());
         return signing.verify(this.signature);
@@ -93,6 +95,7 @@ public class Transaction implements Serializable {
                 ", ledgerId=" + ledgerId +
                 '}';
     }
+
 
     @Override
     public boolean equals(Object o) {
