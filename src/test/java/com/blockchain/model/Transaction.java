@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class Transaction implements Serializable {
+public class Transaction {
 
     @Setter
     private byte[] from;
