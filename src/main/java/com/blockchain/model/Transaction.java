@@ -1,13 +1,11 @@
 package com.blockchain.model;
 
-import sun.security.provider.DSAPublicKeyImpl;
-
 import lombok.Getter;
 import lombok.Setter;
 
-import java.security.InvalidKeyException;
-import java.security.Signature;
-import java.security.SignatureException;
+import java.security.*;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.X509EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
@@ -119,10 +117,15 @@ public class Transaction {
      * @return true if Transaction is valid, false else
      */
     public Boolean isVerified(Signature signing)
-            throws InvalidKeyException, SignatureException {
-        signing.initVerify(new DSAPublicKeyImpl(this.getFrom()));
+            throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, InvalidKeySpecException {
+        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(getFrom());
+        KeyFactory keyFactory = KeyFactory.getInstance("DSA");
+        // public key of sender
+        PublicKey publicKey = keyFactory.generatePublic(keySpec);
+
+        signing.initVerify(publicKey);
         signing.update(this.toString().getBytes());
-        return signing.verify(this.signature);
+        return signing.verify(this.getSignature());
     }
 
     /**
