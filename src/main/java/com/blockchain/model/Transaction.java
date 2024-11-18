@@ -2,6 +2,8 @@ package com.blockchain.model;
 
 import sun.security.provider.DSAPublicKeyImpl;
 
+import lombok.Getter;
+import lombok.Setter;
 
 import java.security.InvalidKeyException;
 import java.security.Signature;
@@ -10,31 +12,51 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Base64;
 
-import lombok.Getter;
-import lombok.Setter;
-
 @Getter
 public class Transaction {
 
+    /**
+     * public keys/addresses of the account that sends
+     */
     @Setter
     private byte[] from;
     private String fromFX;
 
+    /**
+     * public keys/addresses of the account that receives
+     */
     @Setter
     private byte[] to;
     private String toFX;
 
+    /**
+     * coins/amount sent
+     */
     @Setter
     private Integer value;
 
+    /**
+     * time at which the transaction has occurred
+     */
     private String timestamp;
 
+    /**
+     * contain the encrypted information of all the fields, and it will be used to verify the
+     * validity of the transaction (it will be used the same way the field currHash
+     * was used in the {@link Block#getCurrHash()} class)
+     */
     private byte[] signature;
-    private  String signatureFX;
+    private String signatureFX;
 
+    /**
+     * {@link Block} number where the transaction is stored, help retrieve the correct block from database
+     */
     @Setter
     private Integer ledgerId;
 
+    /**
+     * used when we retrieve a transaction from the database
+     */
     //Constructor for loading with existing signature
     public Transaction(
             byte[] from,
@@ -55,8 +77,18 @@ public class Transaction {
         this.ledgerId = ledgerId;
         this.timestamp = timeStamp;
     }
+
+
+    /**
+     * Constructor for creating a new transaction and signing it.
+     * <br>
+     * used when we want to create a new transaction within our application
+     *
+     * @param fromWallet the fromWallet parameter contains the public and
+     *                   private keys of the sender/maker of the transaction.
+     */
     //Constructor for creating a new transaction and signing it.
-    public Transaction (
+    public Transaction(
             Wallet fromWallet,
             byte[] toAddress,
             Integer value,
@@ -78,6 +110,14 @@ public class Transaction {
         this.signatureFX = encoder.encodeToString(this.signature);
     }
 
+    /**
+     * Verification of Transaction,
+     * should be used by the other peers to verify that each transaction is valid.
+     * <br>
+     * We verify that the {@link Transaction#from sender} is the one that created the transaction
+     * and not someone else.
+     * @return true if Transaction is valid, false else
+     */
     public Boolean isVerified(Signature signing)
             throws InvalidKeyException, SignatureException {
         signing.initVerify(new DSAPublicKeyImpl(this.getFrom()));
@@ -85,6 +125,13 @@ public class Transaction {
         return signing.verify(this.signature);
     }
 
+    /**
+     * Note how all the essential fields that make certain
+     * the transaction is unique are included in the toString() method.
+     * <br>
+     * Used to sign in {@link #Transaction(Wallet, byte[], Integer, Integer, Signature)}
+     * and verify the transaction in {@link #isVerified(Signature)}
+     */
     @Override
     public String toString() {
         return "Transaction{" +
@@ -97,6 +144,12 @@ public class Transaction {
     }
 
 
+    /**
+     * two Transactions are equal if and only if they have the same signature
+     * <br>
+     * signature is used because we're certain it's unique.
+     * {@link #timestamp} proves the uniqueness of the Transaction
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
