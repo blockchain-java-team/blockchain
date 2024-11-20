@@ -4,9 +4,9 @@ import lombok.Getter;
 
 import java.security.*;
 
+@Getter
 public class Wallet {
 
-    @Getter
     private final KeyPair keyPair;
 
     public static final int KEY_SIZE = 2048;
@@ -28,4 +28,3 @@ public class Wallet {
     public PublicKey getPublicKey() { return keyPair.getPublic(); }
     public PrivateKey getPrivateKey() { return keyPair.getPrivate(); }
 }
-
