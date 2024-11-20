@@ -53,9 +53,9 @@ public class Transaction {
     private Integer ledgerId;
 
     /**
-     * used when we retrieve a transaction from the database
+     * used when we retrieve a transaction from the database,
+     * Constructor for loading with existing signature
      */
-    //Constructor for loading with existing signature
     public Transaction(
             byte[] from,
             byte[] to,
@@ -85,7 +85,6 @@ public class Transaction {
      * @param fromWallet the fromWallet parameter contains the public and
      *                   private keys of the sender/maker of the transaction.
      */
-    //Constructor for creating a new transaction and signing it.
     public Transaction(
             Wallet fromWallet,
             byte[] toAddress,
