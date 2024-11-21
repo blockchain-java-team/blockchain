@@ -1,6 +1,6 @@
 package com.blockchain.model;
 
-import com.blockchain.EnsaChain;
+
 import lombok.Getter;
 import lombok.Setter;
 
