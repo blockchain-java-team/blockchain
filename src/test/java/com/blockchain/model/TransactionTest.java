@@ -30,7 +30,7 @@ class TransactionTest {
             );
 
             try {
-                assertEquals(true, transaction.isVerified(sig));
+                assertTrue(transaction.isVerified(sig), "Transaction isn't altered");
             } catch (InvalidKeySpecException e) {
                 System.out.println(e.getMessage());
             }
@@ -96,7 +96,7 @@ class TransactionTest {
 
 
             try {
-                assertEquals(false, transaction.isVerified(sig));
+                assertFalse(transaction.isVerified(sig), "Modified transaction should not be verified");
             } catch (InvalidKeySpecException e) {
                 System.out.println(e.getMessage());
             }
