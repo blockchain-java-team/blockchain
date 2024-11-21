@@ -1,6 +1,5 @@
 package com.blockchain.model;
 
-import com.blockchain.EnsaChain;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -72,15 +71,6 @@ public class Block {
 
     /**
      * This constructor is used when we retrieve it from the db
-     *
-     * @param prevHash
-     * @param currHash
-     * @param timeStamp
-     * @param minedBy
-     * @param ledgerId
-     * @param miningPoints
-     * @param luck
-     * @param transactionLedger
      */
     public Block(byte[] prevHash, byte[] currHash, String timeStamp, byte[] minedBy, Integer ledgerId,
                  Integer miningPoints, Double luck, ArrayList<Transaction> transactionLedger) {
