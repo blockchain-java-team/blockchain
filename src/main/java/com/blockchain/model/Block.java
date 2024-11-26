@@ -131,7 +131,7 @@ public class Block {
             throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, InvalidKeySpecException {
         // Get publicKey from this.minedBy (which is the public key in byte array format)
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(this.minedBy);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");  // Use RSA instead of DSA
+        KeyFactory keyFactory = KeyFactory.getInstance("DSA");
         PublicKey publicKey = keyFactory.generatePublic(keySpec);
 
         // Initialize the Signature with the PublicKey for verification
