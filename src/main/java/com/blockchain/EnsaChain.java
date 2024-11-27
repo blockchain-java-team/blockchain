@@ -39,6 +39,7 @@ public class EnsaChain {
             Signature transSignature = Signature.getInstance("SHA256withDSA");
             initBlockRewardTransaction = new Transaction(WalletData.getInstance().getWallet(), WalletData.getInstance().getWallet().getPublicKey().getEncoded(), 100, 1, transSignature);
 
+            // This TX is for the creator of the first block in the blockchain
             BlockchainData.getInstance().addTransaction(initBlockRewardTransaction, true);
             BlockchainData.getInstance().addTransactionState(initBlockRewardTransaction);
         }

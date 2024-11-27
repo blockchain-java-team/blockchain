@@ -8,6 +8,13 @@ import com.blockchain.state.BlockchainState;
 import lombok.Getter;
 
 import java.security.*;
+import lombok.Setter;
+import java.security.GeneralSecurityException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PublicKey;
+import java.security.Signature;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -22,11 +29,14 @@ public class BlockchainData {
         try {
             instance = new BlockchainData();
         } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
     Comparator<Transaction> transactionComparator = Comparator.comparing(Transaction::getTimestamp);
+    @Getter
+    @Setter
+    private int miningPoints;
     // helper
     private Signature signing = Signature.getInstance("SHA256withDSA");
     /**
@@ -39,6 +49,7 @@ public class BlockchainData {
     /**
      * current blockchain. The blockchain in this attribute
      */
+    @Getter
     private LinkedList<Block> currentBlockChain = new LinkedList<>();
 
     /**
@@ -112,6 +123,65 @@ public class BlockchainData {
         newBlockTransactions.sort(transactionComparator);
     }
 
+    public void mineBlock() throws Exception {
+        finalizeBlock(WalletData.getInstance().getWallet());
+        addBlock(latestBlock);
+    }
+
+    /**
+     * preparing/finalizing our latestBlock.
+     * <br>
+     * Reinitialize mining points,
+     * we add the reward
+     * transaction of the block we just finalized to the database since until now
+     * we have kept it only in the newBlockTransactions list, which we copied in
+     * our lastestBlock.
+     * <br>
+     * We reward the miner of block A in block B (A -> B)
+     *
+     * @param minersWallet
+     * @throws GeneralSecurityException
+     * @throws SQLException
+     */
+    private void finalizeBlock(Wallet minersWallet) throws Exception {
+        latestBlock = new Block(BlockchainData.getInstance().currentBlockChain);
+        latestBlock.setTransactionLedger(new ArrayList<>(newBlockTransactions));
+        latestBlock.setTimeStamp(LocalDateTime.now().toString());
+        latestBlock.setMinedBy(minersWallet.getPublicKey().getEncoded());
+        latestBlock.setMiningPoints(miningPoints);
+        signing.initSign(minersWallet.getPrivateKey());
+        signing.update(latestBlock.toString().getBytes());
+        latestBlock.setCurrHash(signing.sign());
+
+        // we include the latestBlock into our CurrentBlockChain since we have finalized it completely.
+        currentBlockChain.add(latestBlock);
+
+        miningPoints = 0;
+
+        //Reward transaction
+        latestBlock.getTransactionLedger().sort(transactionComparator);
+
+        addTransaction(latestBlock.getTransactionLedger().getFirst(), true);
+
+        Transaction transaction = new Transaction(new Wallet(), minersWallet.getPublicKey().getEncoded(),
+                100, latestBlock.getLedgerId() + 1, signing);
+        newBlockTransactions.clear();
+        newBlockTransactions.add(transaction);
+    }
+
+    /**
+     * adds the block to the Blockchain state
+     *
+     * @param block
+     */
+    private void addBlock(Block block) {
+        BlockchainState.blocks.add(block);
+    }
+
+    /**
+     * used whenever we want to load the whole blockchain from
+     * our database and set up the state of the app accordingly
+     */
     public void loadBlockChain() throws GeneralSecurityException {
 
         this.currentBlockChain.addAll(BlockchainState.blocks);
@@ -133,6 +203,7 @@ public class BlockchainData {
 
     /**
      * checks the validity of each transaction and each block.
+     *
      * @param currentBlockChain
      * @throws GeneralSecurityException
      */
