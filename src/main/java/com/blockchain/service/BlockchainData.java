@@ -6,9 +6,8 @@ import com.blockchain.model.Transaction;
 import com.blockchain.model.Wallet;
 import com.blockchain.state.BlockchainState;
 import lombok.Getter;
-
-import java.security.*;
 import lombok.Setter;
+
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
@@ -22,6 +21,10 @@ import java.util.*;
  * We are america btw.
  */
 public class BlockchainData {
+    @Getter
+    private static final int TIMEOUT_INTERVAL = 65;
+    @Getter
+    private static final int MINING_INTERVAL = 60;
     @Getter
     private static BlockchainData instance;
 
@@ -59,6 +62,11 @@ public class BlockchainData {
 
     public BlockchainData() throws NoSuchAlgorithmException {
         this.newBlockTransactions = new ArrayList<>();
+    }
+
+    public String getWalletBalance() {
+        return getBalance(currentBlockChain, newBlockTransactions,
+                WalletData.getInstance().getWallet().getPublicKey()).toString();
     }
 
     /**
