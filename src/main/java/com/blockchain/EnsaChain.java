@@ -6,6 +6,7 @@ import com.blockchain.model.Wallet;
 import com.blockchain.service.WalletData;
 import com.blockchain.service.BlockchainData;
 import com.blockchain.state.BlockchainState;
+import com.blockchain.threads.MiningThread;
 import lombok.Getter;
 
 import java.security.Signature;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 public class EnsaChain {
     public static void main(String[] args) throws Exception {
 
+
         if (BlockchainState.wallets.isEmpty()) {
             Wallet newWallet = new Wallet();
             BlockchainState.wallets.add(newWallet);
@@ -22,6 +24,8 @@ public class EnsaChain {
 
         WalletData.getInstance().loadWallet();
 
+
+        Signature transSignature = Signature.getInstance("SHA256withDSA");
 
         Transaction initBlockRewardTransaction = null;
         if (BlockchainState.blocks.isEmpty()) {
@@ -36,7 +40,6 @@ public class EnsaChain {
 
             BlockchainState.blocks.add(firstBlock);
 
-            Signature transSignature = Signature.getInstance("SHA256withDSA");
             initBlockRewardTransaction = new Transaction(WalletData.getInstance().getWallet(), WalletData.getInstance().getWallet().getPublicKey().getEncoded(), 100, 1, transSignature);
 
             // This TX is for the creator of the first block in the blockchain
@@ -45,6 +48,21 @@ public class EnsaChain {
         }
 
         BlockchainData.getInstance().loadBlockChain();
+
+        new MiningThread().start();
+
+        Wallet walletA = new Wallet();
+
+        // should work
+        Transaction t = new Transaction(WalletData.getInstance().getWallet(), walletA.getPublicKey().getEncoded(), 50, 1, transSignature);
+        BlockchainData.getInstance().addTransaction(t, false);
+        BlockchainData.getInstance().addTransactionState(t);
+
+        // should not work
+        Thread.sleep(16000);
+        Transaction t2 = new Transaction(WalletData.getInstance().getWallet(), walletA.getPublicKey().getEncoded(), 100050, 1, transSignature);
+        BlockchainData.getInstance().addTransaction(t2, false);
+        BlockchainData.getInstance().addTransactionState(t2);
 
     }
 }
