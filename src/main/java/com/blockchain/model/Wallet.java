@@ -12,7 +12,9 @@ public class Wallet {
 
     public static final int KEY_SIZE = 2048;
 
-    //Constructors for generating new KeyPair
+    /**
+     * generating new KeyPair
+     */
     public Wallet() throws NoSuchAlgorithmException {
         this(KeyPairGenerator.getInstance("DSA"));
     }
