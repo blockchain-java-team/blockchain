@@ -5,22 +5,24 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 
-<DialogPane prefHeight="266.0" prefWidth="667.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" >
+<DialogPane prefHeight="266.0" prefWidth="667.0" stylesheets="@styles2.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <content>
         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="657.0">
             <children>
-                <TextField fx:id="toAddress" layoutX="14.0" layoutY="144.0" />
-                <TextField fx:id="value" layoutX="178.0" layoutY="144.0" />
-                <Label layoutX="14.0" layoutY="121.0" text="To Address" />
-                <Label layoutX="178.0" layoutY="121.0" text="Amount" />
-                <Label layoutX="43.0" layoutY="28.0" text="Add New Transaction">
-                    <font>
-                        <Font size="18.0" />
-                    </font>
-                </Label>
-                <Button layoutX="447.0" layoutY="189.0" mnemonicParsing="false" text="Send Transaction" />
+                <!-- Title Label -->
+                <Label layoutX="14.0" layoutY="14.0" styleClass="dialog-title" text="Add New Transaction" />
+
+                <!-- Labels -->
+                <Label layoutX="14.0" layoutY="90.0" styleClass="dialog-label" text="To Address" />
+                <Label layoutX="340.0" layoutY="90.0" styleClass="dialog-label" text="Amount" />
+
+                <!-- Input Fields -->
+                <TextField fx:id="toAddress" layoutX="14.0" layoutY="110.0" prefHeight="32.0" prefWidth="291.0" styleClass="dialog-input" />
+                <TextField fx:id="value" layoutX="340.0" layoutY="110.0" prefWidth="150.0" styleClass="dialog-input" />
+
+                <!-- Send Button -->
+                <Button layoutX="450.0" layoutY="180.0" mnemonicParsing="false" styleClass="dialog-button" text="Send Transaction" />
             </children>
         </AnchorPane>
     </content>
