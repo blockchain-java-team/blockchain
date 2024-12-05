@@ -1,6 +1,6 @@
 package com.blockchain.model;
 
-
+import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -177,4 +177,14 @@ public class Block {
                 ", prevHash=" + Arrays.toString(prevHash) +
                 '}';
     }
+
+    /**
+     * Converts the current Block object to a JSON string.
+     * @return JSON representation of the Block object.
+     */
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
 }

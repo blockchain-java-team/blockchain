@@ -1,5 +1,6 @@
 package com.blockchain.model;
 
+import com.google.gson.Gson;
 import lombok.Getter;
 
 import java.security.*;
@@ -27,4 +28,13 @@ public class Wallet {
 
     public PublicKey getPublicKey() { return keyPair.getPublic(); }
     public PrivateKey getPrivateKey() { return keyPair.getPrivate(); }
+
+    /**
+     * Converts the current Wallet object to a JSON string.
+     * @return JSON representation of the Wallet object.
+     */
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
 }
