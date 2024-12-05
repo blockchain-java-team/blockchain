@@ -1,5 +1,6 @@
 package com.blockchain.model;
 
+import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -162,6 +163,15 @@ public class Transaction {
     @Override
     public int hashCode() {
         return Arrays.hashCode(getSignature());
+    }
+
+    /**
+     * Converts the current Transaction object to a JSON string.
+     * @return JSON representation of the Transaction object.
+     */
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
     }
 
 }
