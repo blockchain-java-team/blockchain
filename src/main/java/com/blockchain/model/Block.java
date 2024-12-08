@@ -1,6 +1,6 @@
 package com.blockchain.model;
 
-
+import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -131,7 +131,7 @@ public class Block {
             throws InvalidKeyException, SignatureException, NoSuchAlgorithmException, InvalidKeySpecException {
         // Get publicKey from this.minedBy (which is the public key in byte array format)
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(this.minedBy);
-        KeyFactory keyFactory = KeyFactory.getInstance("RSA");  // Use RSA instead of DSA
+        KeyFactory keyFactory = KeyFactory.getInstance("DSA");
         PublicKey publicKey = keyFactory.generatePublic(keySpec);
 
         // Initialize the Signature with the PublicKey for verification
@@ -177,4 +177,14 @@ public class Block {
                 ", prevHash=" + Arrays.toString(prevHash) +
                 '}';
     }
+
+    /**
+     * Converts the current Block object to a JSON string.
+     * @return JSON representation of the Block object.
+     */
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
+
 }
