@@ -22,7 +22,7 @@ public class MiningThread extends Thread {
         while (true) {
             long lastMinedBlock = LocalDateTime.parse(BlockchainData.getInstance()
                     .getCurrentBlockChain().getLast().getTimeStamp()).toEpochSecond(ZoneOffset.UTC);
-            if ((lastMinedBlock + BlockchainData.getMINING_INTERVAL()) < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
+            if ((lastMinedBlock + BlockchainData.getTIMEOUT_INTERVAL()) < LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
                 System.out.println("BlockChain is too old for mining! Update it from peers");
             } else if (((lastMinedBlock + BlockchainData.getMINING_INTERVAL()) - LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) > 0) {
                 System.out.println("BlockChain is current, mining will start in " +
@@ -37,10 +37,6 @@ public class MiningThread extends Thread {
                 System.out.println("Your balance is " + BlockchainData.getInstance().getWalletBalance());
             }
             System.out.println("Your balance is " + BlockchainData.getInstance().getWalletBalance());
-            System.out.println("Last Mining Block timestamp : " + LocalDateTime.parse(BlockchainData.getInstance()
-                    .getCurrentBlockChain().getLast().getTimeStamp()));
-
-            System.out.println(BlockchainData.getInstance().getCurrentBlockChain());
 
             try {
                 Thread.sleep(2000);
