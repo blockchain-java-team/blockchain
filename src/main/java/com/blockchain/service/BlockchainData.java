@@ -229,4 +229,8 @@ public class BlockchainData {
             }
         }
     }
+
+    public void getBlockchainConsensus(LinkedList<Block> returnedBlockchain) {
+        //TODO
+    }
 }
