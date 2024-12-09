@@ -7,9 +7,7 @@ import com.blockchain.model.Wallet;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author khabir
- **/
+
 public class BlockchainState {
     public static List<Block> blocks = new ArrayList<>();
     public static List<Wallet> wallets = new ArrayList<>();
