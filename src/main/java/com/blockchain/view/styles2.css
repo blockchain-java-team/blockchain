@@ -1,0 +1,49 @@
+/* General DialogPane Styling */
+.dialog-pane {
+    -fx-background-color: #f4f4f4; /* Light grey background */
+    -fx-border-color: #cccccc;    /* Subtle border */
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 15;
+}
+
+/* Title Styling */
+.dialog-title {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333; /* Dark grey text */
+    -fx-padding: 5;
+}
+
+/* Label Styling */
+.dialog-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #555555; /* Medium grey text */
+}
+
+/* TextField Styling */
+.dialog-input {
+    -fx-font-size: 14px;
+    -fx-padding: 5;
+    -fx-border-color: #cccccc;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-background-color: #ffffff;
+}
+
+/* Button Styling */
+.dialog-button {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-background-color: #4CAF50; /* Green button */
+    -fx-text-fill: white;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+    -fx-padding: 8 15;
+    -fx-cursor: hand;
+}
+
+.dialog-button:hover {
+    -fx-background-color: #45a049; /* Darker green on hover */
+}

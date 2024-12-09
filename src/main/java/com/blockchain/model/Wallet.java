@@ -1,5 +1,6 @@
 package com.blockchain.model;
 
+import com.google.gson.Gson;
 import lombok.Getter;
 
 import java.security.*;
@@ -11,7 +12,9 @@ public class Wallet {
 
     public static final int KEY_SIZE = 2048;
 
-    //Constructors for generating new KeyPair
+    /**
+     * generating new KeyPair
+     */
     public Wallet() throws NoSuchAlgorithmException {
         this(KeyPairGenerator.getInstance("DSA"));
     }
@@ -27,4 +30,13 @@ public class Wallet {
 
     public PublicKey getPublicKey() { return keyPair.getPublic(); }
     public PrivateKey getPrivateKey() { return keyPair.getPrivate(); }
+
+    /**
+     * Converts the current Wallet object to a JSON string.
+     * @return JSON representation of the Wallet object.
+     */
+    public String toJson() {
+        Gson gson = new Gson();
+        return gson.toJson(this);
+    }
 }
