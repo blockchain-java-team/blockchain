@@ -118,7 +118,7 @@ public class BlockchainData {
             throw new GeneralSecurityException("Not enough funds by sender to record transaction");
         }
 
-        BlockchainState.transactions.add(transaction);
+        BlockchainState.addTransaction(transaction);
     }
 
     /**
@@ -182,17 +182,17 @@ public class BlockchainData {
      *
      * @param block
      */
-    private void addBlock(Block block) {
-        BlockchainState.blocks.add(block);
+    private void addBlock(Block block) throws Exception {
+        BlockchainState.addBlock(block);
     }
 
     /**
      * used whenever we want to load the whole blockchain from
      * our database and set up the state of the app accordingly
      */
-    public void loadBlockChain() throws GeneralSecurityException {
+    public void loadBlockChain() throws Exception {
 
-        this.currentBlockChain.addAll(BlockchainState.blocks);
+        this.currentBlockChain.addAll(BlockchainState.getBlocks());
 
         // this block is mined
         latestBlock = currentBlockChain.getLast();
