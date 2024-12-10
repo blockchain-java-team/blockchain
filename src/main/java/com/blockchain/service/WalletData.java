@@ -21,9 +21,9 @@ public class WalletData {
     private Wallet wallet;
 
     //This will load your wallet from the database.
-    public void loadWallet() {
-        PublicKey pub2 = BlockchainState.wallets.getLast().getPublicKey();
-        PrivateKey prv2 = BlockchainState.wallets.getLast().getPrivateKey();
+    public void loadWallet() throws Exception {
+        PublicKey pub2 = BlockchainState.getWallets().getLast().getPublicKey();
+        PrivateKey prv2 = BlockchainState.getWallets().getLast().getPrivateKey();
         this.wallet = new Wallet(pub2, prv2);
     }
 
