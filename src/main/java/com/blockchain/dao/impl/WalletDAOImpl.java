@@ -100,6 +100,7 @@ public class WalletDAOImpl implements WalletDAO {
         byte[] privateKeyBytes = decoder.decode(rs.getString("PRIVATE_KEY"));
         PrivateKey privateKey = keyFactory.generatePrivate(new PKCS8EncodedKeySpec(privateKeyBytes));
 
+
         // Return Wallet object
         return new Wallet(publicKey, privateKey);
     }
