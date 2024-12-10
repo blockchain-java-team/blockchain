@@ -12,14 +12,14 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@MainWindowStyle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.blockchain.controller.MainWindowController">
     <top>
         <!-- Stylish Top Menu -->
         <MenuBar prefHeight="40.0" styleClass="menu-bar" BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" styleClass="menu-title" text="☰ Menu">
                     <items>
-                        <MenuItem mnemonicParsing="false" styleClass="menu-item" text="💳 Make Transaction" />
+                        <MenuItem mnemonicParsing="false" styleClass="menu-item" onAction="#toNewTransactionController" text="💳 Make Transaction" />
                         <MenuItem mnemonicParsing="false" styleClass="menu-item" text="📜 Transaction History" />
                         <MenuItem mnemonicParsing="false" styleClass="menu-item" text="⚙ Settings" />
                     </items>
@@ -29,15 +29,15 @@
     </top>
     <center>
         <!-- Modern TableView -->
-        <TableView prefHeight="400.0" prefWidth="700.0" styleClass="center-table" BorderPane.alignment="CENTER">
+        <TableView fx:id="tableview" prefHeight="400.0" prefWidth="700.0" styleClass="center-table" BorderPane.alignment="CENTER">
             <columns>
                 <TableColumn text="🧾 Current Block Transactions">
                     <columns>
-                        <TableColumn text="📤 From" />
-                        <TableColumn text="📥 To" />
-                        <TableColumn text="💰 Value" />
-                        <TableColumn text="✍ Signature" />
-                        <TableColumn text="⏰ Created on" />
+                        <TableColumn fx:id="from" text="📤 From" />
+                        <TableColumn fx:id="to" text="📥 To" />
+                        <TableColumn fx:id="value" text="💰 Value" />
+                        <TableColumn fx:id="signature" text="✍ Signature" />
+                        <TableColumn fx:id="createdOn" text="⏰ Created on" />
                     </columns>
                 </TableColumn>
             </columns>
@@ -53,7 +53,7 @@
                 <AnchorPane prefHeight="80.0" prefWidth="250.0">
                     <children>
                         <Label layoutX="10.0" layoutY="10.0" styleClass="label-title" text="💵 Your Balance:" />
-                        <TextField layoutX="118.0" layoutY="25.0" prefWidth="100.0" styleClass="input-field" />
+                        <TextField fx:id="eCoins" layoutX="118.0" layoutY="25.0" prefWidth="100.0" styleClass="input-field" />
                     </children>
                 </AnchorPane>
             </left>
@@ -61,14 +61,14 @@
                 <AnchorPane prefHeight="80.0" prefWidth="300.0">
                     <children>
                         <Label layoutX="-12.0" layoutY="5.0" styleClass="label-title" text="🔑 Your Address / Public Key:" />
-                        <TextArea layoutX="180.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="textarea-field" wrapText="true" />
+                        <TextArea fx:id="publicKey" layoutX="180.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="textarea-field" wrapText="true" />
                     </children>
                 </AnchorPane>
             </center>
             <right>
                 <AnchorPane prefHeight="80.0" prefWidth="150.0">
                     <children>
-                        <Button layoutX="26.0" layoutY="23.0" mnemonicParsing="false" styleClass="refresh-button" text="🔄 Refresh" />
+                        <Button layoutX="26.0" layoutY="23.0" mnemonicParsing="false" styleClass="refresh-button" text="🔄 Refresh" onAction="#refresh" />
                     </children>
                 </AnchorPane>
             </right>
