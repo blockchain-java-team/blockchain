@@ -5,6 +5,9 @@ import com.blockchain.model.Block;
 import com.blockchain.model.Transaction;
 import com.blockchain.model.Wallet;
 import com.blockchain.state.BlockchainState;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -48,6 +51,7 @@ public class BlockchainData {
      * represent the current ledger of our blockchain
      */
     private List<Transaction> newBlockTransactions;
+    private ObservableList<Transaction> newBlockTransactionsFX;
 
     /**
      * current blockchain. The blockchain in this attribute
@@ -228,5 +232,14 @@ public class BlockchainData {
                 }
             }
         }
+    }
+//    This method prepares and returns a sorted, up-to-date list of transactions that the UI can observe and display.
+//    FXCollections.observableArrayList: Wraps the newBlockTransactionsFX into an ObservableList,
+//    which notifies JavaFX UI components of any changes
+    public ObservableList<Transaction> getTransactionLedgerFX() {
+        newBlockTransactionsFX.clear();
+        newBlockTransactions.sort(transactionComparator);
+        newBlockTransactionsFX.addAll(newBlockTransactions);
+        return FXCollections.observableArrayList(newBlockTransactionsFX);
     }
 }
