@@ -2,6 +2,8 @@ package com.blockchain.dao.impl;
 
 import com.blockchain.dao.BlockDAO;
 import com.blockchain.model.Block;
+import com.blockchain.util.DatabaseConnection;
+import lombok.Getter;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,12 +11,14 @@ import java.util.List;
 
 
 public class BlockDAOImpl implements BlockDAO {
+
+    @Getter
     private static final String DB_URL = "jdbc:sqlite:db/blockchain.db";
 
     @Override
     public void save(Block block) throws Exception {
         String query = "INSERT INTO BLOCKS (ID, PREVIOUS_HASH, CURRENT_HASH, LEDGER_ID, CREATED_ON, CREATED_BY, MININGS_POINTS, LUCK) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, block.getLedgerId());
@@ -34,7 +38,7 @@ public class BlockDAOImpl implements BlockDAO {
     public List<Block> findAll() throws Exception {
         List<Block> blocks = new ArrayList<>();
         String query = "SELECT * FROM BLOCKS";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
@@ -57,7 +61,7 @@ public class BlockDAOImpl implements BlockDAO {
     @Override
     public Block findById(int id) throws Exception {
         String query = "SELECT * FROM BLOCKS WHERE ID = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id);
@@ -82,7 +86,7 @@ public class BlockDAOImpl implements BlockDAO {
     @Override
     public void deleteById(int id) throws Exception {
         String query = "DELETE FROM BLOCKS WHERE ID = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
