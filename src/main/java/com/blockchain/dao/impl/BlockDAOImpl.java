@@ -2,11 +2,15 @@ package com.blockchain.dao.impl;
 
 import com.blockchain.dao.BlockDAO;
 import com.blockchain.model.Block;
+import com.blockchain.model.Transaction;
+import com.blockchain.service.BlockchainData;
 import com.blockchain.util.DatabaseConnection;
 import lombok.Getter;
 
+import java.security.GeneralSecurityException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -92,4 +96,32 @@ public class BlockDAOImpl implements BlockDAO {
             stmt.executeUpdate();
         }
     }
+
+    @Override
+    public void replaceBlockchainInDatabase(List<Block> receivedBC){
+        try {
+            Connection connection = DriverManager.getConnection(DB_URL);
+            Statement clearDBStatement = connection.createStatement();
+            clearDBStatement.executeUpdate("DELETE FROM BLOCKCHAIN WHERE 1");
+            clearDBStatement.executeUpdate("DELETE FROM TRANSACTIONS WHERE 1");
+            clearDBStatement.close();
+            connection.close();
+            for (Block block : receivedBC) {
+                save(block);
+                boolean rewardTransaction = true;
+                Comparator<Transaction> transactionComparator = Comparator.comparing(Transaction::getTimestamp);
+                block.getTransactionLedger().sort(transactionComparator);
+                for (Transaction transaction : block.getTransactionLedger()) {
+                    BlockchainData.getInstance().addTransaction(transaction, rewardTransaction);
+                    rewardTransaction = false;
+                }
+            }
+        } catch (SQLException | GeneralSecurityException e) {
+            System.out.println("Problem with DB: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
 }
