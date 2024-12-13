@@ -2,6 +2,7 @@ package com.blockchain.dao.impl;
 
 import com.blockchain.dao.WalletDAO;
 import com.blockchain.model.Wallet;
+import com.blockchain.util.DatabaseConnection;
 import lombok.Getter;
 
 import java.security.*;
@@ -23,7 +24,7 @@ public class WalletDAOImpl implements WalletDAO {
     @Override
     public void save(Wallet wallet) throws Exception {
         String query = "INSERT INTO Wallet (PUBLIC_KEY, PRIVATE_KEY) VALUES (?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             Base64.Encoder encoder = Base64.getEncoder();
@@ -41,7 +42,7 @@ public class WalletDAOImpl implements WalletDAO {
     public List<Wallet> findAll() throws Exception {
         List<Wallet> wallets = new ArrayList<>();
         String query = "SELECT * FROM Wallet";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
@@ -58,7 +59,7 @@ public class WalletDAOImpl implements WalletDAO {
     @Override
     public Wallet findById(String publicKey) throws Exception {
         String query = "SELECT * FROM Wallet WHERE PUBLIC_KEY = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, publicKey);
@@ -77,7 +78,7 @@ public class WalletDAOImpl implements WalletDAO {
     @Override
     public void deleteById(String publicKey) throws Exception {
         String query = "DELETE FROM Wallet WHERE PUBLIC_KEY = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setString(1, publicKey);
