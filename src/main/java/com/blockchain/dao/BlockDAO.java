@@ -9,4 +9,5 @@ public interface BlockDAO {
     List<Block> findAll() throws Exception;
     Block findById(int id) throws Exception;
     void deleteById(int id) throws Exception;
+    void replaceBlockchainInDatabase(List<Block> receivedBC);
 }

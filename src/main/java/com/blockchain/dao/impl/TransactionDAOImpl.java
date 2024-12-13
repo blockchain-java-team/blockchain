@@ -2,6 +2,7 @@ package com.blockchain.dao.impl;
 
 import com.blockchain.dao.TransactionDAO;
 import com.blockchain.model.Transaction;
+import com.blockchain.util.DatabaseConnection;
 import lombok.Getter;
 
 
@@ -15,8 +16,8 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     @Override
     public void save(Transaction transaction) throws Exception {
-        String query = "INSERT INTO TRANSACTIONS (FROM, TO, VALUE, SIGNATURE, LEDGER_ID, CREATED_ON) VALUES (?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        String query = "INSERT INTO TRANSACTIONS (SENDER, TO, VALUE, SIGNATURE, LEDGER_ID, CREATED_ON) VALUES (?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setBytes(1, transaction.getFrom());
@@ -34,13 +35,13 @@ public class TransactionDAOImpl implements TransactionDAO {
     public List<Transaction> findAll() throws Exception {
         List<Transaction> transactions = new ArrayList<>();
         String query = "SELECT * FROM TRANSACTIONS";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
                 transactions.add(new Transaction(
-                        rs.getBytes("FROM"),
+                        rs.getBytes("SENDER"),
                         rs.getBytes("TO"),
                         rs.getInt("VALUE"),
                         rs.getBytes("SIGNATURE"),
@@ -55,14 +56,14 @@ public class TransactionDAOImpl implements TransactionDAO {
     @Override
     public Transaction findByLedgerId(int ledgerId) throws Exception {
         String query = "SELECT * FROM TRANSACTIONS WHERE LEDGER_ID = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, ledgerId);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
                     return new Transaction(
-                            rs.getBytes("FROM"),
+                            rs.getBytes("SENDER"),
                             rs.getBytes("TO"),
                             rs.getInt("VALUE"),
                             rs.getBytes("SIGNATURE"),
@@ -78,7 +79,7 @@ public class TransactionDAOImpl implements TransactionDAO {
     @Override
     public void deleteByLedgerId(int ledgerId) throws Exception {
         String query = "DELETE FROM TRANSACTIONS WHERE LEDGER_ID = ?";
-        try (Connection conn = DriverManager.getConnection(DB_URL);
+        try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, ledgerId);
             stmt.executeUpdate();
