@@ -16,7 +16,6 @@ public class TransactionDAOImpl implements TransactionDAO {
 
     @Override
     public void save(Transaction transaction) throws Exception {
-        String query = "INSERT INTO TRANSACTIONS (SENDER, TO, VALUE, SIGNATURE, LEDGER_ID, CREATED_ON) VALUES (?, ?, ?, ?, ?, ?)";
         String query = "INSERT INTO TRANSACTIONS (SENDER, \"TO\", VALUE, SIGNATURE, LEDGER_ID, CREATED_ON) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
              PreparedStatement stmt = conn.prepareStatement(query)) {

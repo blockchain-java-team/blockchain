@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @Getter
 public class EnsaChain extends Application {
     public static void main(String[] args) throws Exception {
-        launch(args); // calss the start method
+        launch(args); // calls the start method
     }
 
     @Override

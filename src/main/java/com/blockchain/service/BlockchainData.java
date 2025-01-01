@@ -245,4 +245,9 @@ public class BlockchainData {
         newBlockTransactionsFX.addAll(newBlockTransactions);
         return FXCollections.observableArrayList(newBlockTransactionsFX);
     }
+
+    public void getBlockchainConsensus(LinkedList<Block> returnedBlockchain) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getBlockchainConsensus'");
+    }
 }
