@@ -1,5 +1,6 @@
 package com.blockchain.service;
 
+import com.blockchain.dao.impl.BlockDAOImpl;
 import com.blockchain.dao.impl.TransactionDAOImpl;
 import com.blockchain.helpers.Utils;
 import com.blockchain.model.Block;
@@ -353,10 +354,9 @@ public class BlockchainData {
      *                   blockchain.
      * @return The updated current blockchain if it wins, or null if the received
      *         blockchain wins.
-     * @throws GeneralSecurityException If a security exception occurs during the
-     *                                  process.
+     * @throws Exception If an error occurs while adding transactions or sorting the
      */
-    private LinkedList<Block> compareMiningPointsAndLuck(LinkedList<Block> receivedBC) throws GeneralSecurityException {
+    private LinkedList<Block> compareMiningPointsAndLuck(LinkedList<Block> receivedBC) throws Exception {
         // check if both blockchains have the same prevHashes to confirm they are both
         // contending to mine the last block
         // if they are the same compare the mining points and luck in case of equal
@@ -380,7 +380,7 @@ public class BlockchainData {
                 // we are returning the mining points since our local block lost.
                 setMiningPoints(BlockchainData.getInstance().getMiningPoints()
                         + getCurrentBlockChain().getLast().getMiningPoints());
-                replaceBlockchainInDatabase(receivedBC);
+                new BlockDAOImpl().replaceBlockchainInDatabase(receivedBC);
                 setCurrentBlockChain(new LinkedList<>());
                 loadBlockChain();
                 System.out.println("Received blockchain won!");
@@ -407,8 +407,9 @@ public class BlockchainData {
      * 
      * @param receivedBC The received blockchain to compare with the current
      * @return The updated current blockchain if it wins, or null if the received
+     * @throws Exception If an error occurs while adding transactions or sorting the
      */
-    private Object checkWhichIsCreatedFirst(LinkedList<Block> receivedBC) {
+    private Object checkWhichIsCreatedFirst(LinkedList<Block> receivedBC) throws Exception {
         // Compare timestamps to see which one is created first.
         long initRcvBlockTime = LocalDateTime.parse(receivedBC.getFirst().getTimeStamp()).toEpochSecond(ZoneOffset.UTC);
         long initLocalBlockTIme = LocalDateTime.parse(getCurrentBlockChain().getFirst().getTimeStamp())
@@ -416,7 +417,7 @@ public class BlockchainData {
         if (initRcvBlockTime < initLocalBlockTIme) {
             // we reset the mining points since we weren't contributing until now.
             setMiningPoints(0);
-            replaceBlockchainInDatabase(receivedBC);
+            new BlockDAOImpl().replaceBlockchainInDatabase(receivedBC);
             setCurrentBlockChain(new LinkedList<>());
             loadBlockChain();
             System.out.println("PeerClient blockchain won!, PeerServer's BC was old");
@@ -436,8 +437,9 @@ public class BlockchainData {
      * 
      * @param receivedBC The received blockchain to be compared with the current
      * @return The updated current blockchain if it wins, or null if the received
+     * @throws Exception If an error occurs while adding transactions or sorting the
      */
-    private LinkedList<Block> checkIfOutdated(LinkedList<Block> receivedBC) {
+    private LinkedList<Block> checkIfOutdated(LinkedList<Block> receivedBC) throws Exception {
         // Check how old the blockchains are.
         long lastMinedLocalBlock = LocalDateTime.parse(getCurrentBlockChain().getLast().getTimeStamp())
                 .toEpochSecond(ZoneOffset.UTC);
@@ -452,7 +454,7 @@ public class BlockchainData {
                 && (lastMinedRcvdBlock + TIMEOUT_INTERVAL) >= LocalDateTime.now().toEpochSecond(ZoneOffset.UTC)) {
             // we reset the mining points since we weren't contributing until now.
             setMiningPoints(0);
-            replaceBlockchainInDatabase(receivedBC);
+            new BlockDAOImpl().replaceBlockchainInDatabase(receivedBC);
             setCurrentBlockChain(new LinkedList<>());
             loadBlockChain();
             System.out.println("received blockchain won!, local BC was old");

@@ -88,13 +88,10 @@ public class BlockDAOImpl implements BlockDAO {
 
     @Override
     public void replaceBlockchainInDatabase(List<Block> receivedBC) {
-        try {
-            Connection connection = DriverManager.getConnection(DB_URL);
-            Statement clearDBStatement = connection.createStatement();
+        try (Connection connection = DriverManager.getConnection(DB_URL);
+                Statement clearDBStatement = connection.createStatement()) {
             clearDBStatement.executeUpdate("DELETE FROM BLOCKCHAIN WHERE 1");
             clearDBStatement.executeUpdate("DELETE FROM TRANSACTIONS WHERE 1");
-            clearDBStatement.close();
-            connection.close();
             for (Block block : receivedBC) {
                 save(block);
                 boolean rewardTransaction = true;
