@@ -15,13 +15,11 @@
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" stylesheets="@MainWindowStyle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.blockchain.controller.MainWindowController">
     <top>
         <!-- Stylish Top Menu -->
-        <MenuBar prefHeight="40.0" styleClass="menu-bar" BorderPane.alignment="CENTER">
+        <MenuBar prefHeight="40.0" style="-fx-background-color: #4CAF50;" styleClass="menu-bar" BorderPane.alignment="CENTER">
             <menus>
                 <Menu mnemonicParsing="false" styleClass="menu-title" text="☰ Menu">
                     <items>
-                        <MenuItem mnemonicParsing="false" styleClass="menu-item" onAction="#toNewTransactionController" text="💳 Make Transaction" />
-                        <MenuItem mnemonicParsing="false" styleClass="menu-item" text="📜 Transaction History" />
-                        <MenuItem mnemonicParsing="false" styleClass="menu-item" text="⚙ Settings" />
+                        <MenuItem mnemonicParsing="false" onAction="#toNewTransactionController" styleClass="menu-item" text="💳 Make Transaction" />
                     </items>
                 </Menu>
             </menus>
@@ -29,9 +27,9 @@
     </top>
     <center>
         <!-- Modern TableView -->
-        <TableView fx:id="tableview" prefHeight="400.0" prefWidth="700.0" styleClass="center-table" BorderPane.alignment="CENTER">
+        <TableView fx:id="tableview" prefHeight="484.0" prefWidth="845.0" styleClass="center-table" BorderPane.alignment="CENTER">
             <columns>
-                <TableColumn text="🧾 Current Block Transactions">
+                <TableColumn text="Current Block Transactions">
                     <columns>
                         <TableColumn fx:id="from" text="📤 From" />
                         <TableColumn fx:id="to" text="📥 To" />
@@ -52,23 +50,23 @@
             <left>
                 <AnchorPane prefHeight="80.0" prefWidth="250.0">
                     <children>
-                        <Label layoutX="10.0" layoutY="10.0" styleClass="label-title" text="💵 Your Balance:" />
-                        <TextField fx:id="eCoins" layoutX="118.0" layoutY="25.0" prefWidth="100.0" styleClass="input-field" />
+                        <Label layoutX="7.0" layoutY="30.0" styleClass="label-title" text="💵 Your Balance:" />
+                        <TextField fx:id="eCoins" layoutX="120.0" layoutY="24.0" prefHeight="31.0" prefWidth="121.0" styleClass="input-field" />
                     </children>
                 </AnchorPane>
             </left>
             <center>
                 <AnchorPane prefHeight="80.0" prefWidth="300.0">
                     <children>
-                        <Label layoutX="-12.0" layoutY="5.0" styleClass="label-title" text="🔑 Your Address / Public Key:" />
-                        <TextArea fx:id="publicKey" layoutX="180.0" layoutY="10.0" prefHeight="50.0" prefWidth="200.0" styleClass="textarea-field" wrapText="true" />
+                        <Label layoutX="-2.0" layoutY="30.0" styleClass="label-title" text="🔑 Your Address / Public Key:" />
+                        <TextArea fx:id="publicKey" layoutX="195.0" layoutY="11.0" prefHeight="50.0" prefWidth="200.0" styleClass="textarea-field" wrapText="true" />
                     </children>
                 </AnchorPane>
             </center>
             <right>
-                <AnchorPane prefHeight="80.0" prefWidth="150.0">
+                <AnchorPane prefHeight="79.0" prefWidth="120.0">
                     <children>
-                        <Button layoutX="26.0" layoutY="23.0" mnemonicParsing="false" styleClass="refresh-button" text="🔄 Refresh" onAction="#refresh" />
+                        <Button layoutX="11.0" layoutY="22.0" mnemonicParsing="false" onAction="#refresh" prefHeight="27.0" prefWidth="98.0" styleClass="refresh-button" text="🔄 Refresh" />
                     </children>
                 </AnchorPane>
             </right>

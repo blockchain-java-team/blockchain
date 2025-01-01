@@ -1,5 +1,7 @@
 package com.blockchain.controller;
 
+import com.blockchain.dao.TransactionDAO;
+import com.blockchain.dao.impl.TransactionDAOImpl;
 import com.blockchain.model.Transaction;
 import com.blockchain.service.BlockchainData;
 import com.blockchain.service.WalletData;
@@ -25,31 +27,20 @@ public class AddNewTransactionController {
 
     @FXML
     public void createNewTransaction() throws GeneralSecurityException {
-    	System.out.println("i'm in yeeaaaah");
         Base64.Decoder decoder = Base64.getDecoder();
-        System.out.println("i'm in yeeaaaahsub");
         Signature signing = Signature.getInstance("SHA256withDSA");
-        System.out.println("i'm in yeeaaaahsub1");
 //        Retrieves the ledgerId from the first transaction in the blockchain ledger (TransactionLedgerFX)
         Integer ledgerId = BlockchainData.getInstance().getTransactionLedgerFX().get(0).getLedgerId();
-        System.out.println("i'm in yeeaaaahsub2");
 //        Decodes the recipient's address (entered as a Base64 string in the toAddress field) into a byte array
         byte[] sendB = decoder.decode(toAddress.getText());
-//        WalletData.getInstance().getWallet(): Retrieves the sender's wallet (likely the private/public keypair).
-        System.out.println("i'm in yeeaaaah1");
         Transaction transaction = new Transaction(WalletData.getInstance()
                 .getWallet(),sendB ,Integer.parseInt(value.getText()), ledgerId, signing);
-        System.out.println("i'm in yeeaaaah2");
         try {
-			BlockchainData.getInstance().addTransaction(transaction,false);
-			System.out.println("i'm in yeeaaaah285");
+			BlockchainData.getInstance().addTransaction(transaction,false);	        
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			System.out.println("i'm in yeeaaaah286");
 		}
-        System.out.println("i'm in yeeaaaah3");
         BlockchainData.getInstance().addTransactionState(transaction);
-        System.out.println("i'm in yeeaaaah4");
     }
 }
