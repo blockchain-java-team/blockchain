@@ -1,11 +1,12 @@
 package com.blockchain.dao;
 
 import com.blockchain.model.Transaction;
+
 import java.util.List;
 
 public interface TransactionDAO {
-    void save(Transaction transaction);
-    List<Transaction> findAll();
-    Transaction findById(String id);
-    void delete(String id);
+    void save(Transaction transaction) throws Exception;
+    List<Transaction> findAll() throws Exception;
+    Transaction findByLedgerId(int ledgerId) throws Exception;
+    void deleteByLedgerId(int ledgerId) throws Exception;
 }
