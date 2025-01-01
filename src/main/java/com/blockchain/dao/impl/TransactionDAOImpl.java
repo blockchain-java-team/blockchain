@@ -5,7 +5,6 @@ import com.blockchain.model.Transaction;
 import com.blockchain.util.DatabaseConnection;
 import lombok.Getter;
 
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +17,7 @@ public class TransactionDAOImpl implements TransactionDAO {
     public void save(Transaction transaction) throws Exception {
         String query = "INSERT INTO TRANSACTIONS (SENDER, \"TO\", VALUE, SIGNATURE, LEDGER_ID, CREATED_ON) VALUES (?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setBytes(1, transaction.getFrom());
             stmt.setBytes(2, transaction.getTo());
@@ -36,50 +35,39 @@ public class TransactionDAOImpl implements TransactionDAO {
         List<Transaction> transactions = new ArrayList<>();
         String query = "SELECT * FROM TRANSACTIONS";
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                transactions.add(new Transaction(
-                        rs.getBytes("SENDER"),
-                        rs.getBytes("TO"),
-                        rs.getInt("VALUE"),
-                        rs.getBytes("SIGNATURE"),
-                        rs.getInt("LEDGER_ID"),
-                        rs.getString("CREATED_ON")
-                ));
+                transactions.add(new Transaction(rs.getBytes("SENDER"), rs.getBytes("TO"), rs.getInt("VALUE"),
+                        rs.getBytes("SIGNATURE"), rs.getInt("LEDGER_ID"), rs.getString("CREATED_ON")));
             }
         }
         return transactions;
     }
 
     @Override
-    public Transaction findByLedgerId(int ledgerId) throws Exception {
+    public List<Transaction> findByLedgerId(int ledgerId) throws Exception {
         String query = "SELECT * FROM TRANSACTIONS WHERE LEDGER_ID = ?";
+        List<Transaction> transactions = new ArrayList<>();
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, ledgerId);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new Transaction(
-                            rs.getBytes("SENDER"),
-                            rs.getBytes("TO"),
-                            rs.getInt("VALUE"),
-                            rs.getBytes("SIGNATURE"),
-                            rs.getInt("LEDGER_ID"),
-                            rs.getString("CREATED_ON"));
+                while (rs.next()) {
+                    transactions.add(new Transaction(rs.getBytes("SENDER"), rs.getBytes("TO"), rs.getInt("VALUE"),
+                            rs.getBytes("SIGNATURE"), rs.getInt("LEDGER_ID"), rs.getString("CREATED_ON")));
                 }
             }
         }
-        return null;
+        return transactions;
     }
 
     @Override
     public void deleteByLedgerId(int ledgerId) throws Exception {
         String query = "DELETE FROM TRANSACTIONS WHERE LEDGER_ID = ?";
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, ledgerId);
             stmt.executeUpdate();
         }

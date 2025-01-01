@@ -51,10 +51,8 @@ public class EnsaChain extends Application {
 
             BlockchainState.addBlock(firstBlock);
 
-            initBlockRewardTransaction = new Transaction(
-                    WalletData.getInstance().getWallet(),
-                    WalletData.getInstance().getWallet().getPublicKey().getEncoded(),
-                    100, 1, transSignature);
+            initBlockRewardTransaction = new Transaction(WalletData.getInstance().getWallet(),
+                    WalletData.getInstance().getWallet().getPublicKey().getEncoded(), 100, 1, transSignature);
 
             BlockchainData.getInstance().addTransaction(initBlockRewardTransaction, true);
             BlockchainData.getInstance().addTransactionState(initBlockRewardTransaction);

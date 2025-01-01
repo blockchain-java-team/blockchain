@@ -9,7 +9,7 @@ import java.security.PublicKey;
 
 public class WalletData {
 
-    //singleton class
+    // singleton class
     @Getter
     private static final WalletData instance;
 
@@ -20,7 +20,7 @@ public class WalletData {
     @Getter
     private Wallet wallet;
 
-    //This will load your wallet from the database.
+    // This will load your wallet from the database.
     public void loadWallet() throws Exception {
         PublicKey pub2 = BlockchainState.getWallets().getLast().getPublicKey();
         PrivateKey prv2 = BlockchainState.getWallets().getLast().getPrivateKey();

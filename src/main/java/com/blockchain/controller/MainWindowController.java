@@ -25,7 +25,7 @@ import java.util.Optional;
 public class MainWindowController {
 
     @FXML
-    public TableView<Transaction> tableview = new TableView<>(); //this is read-only UI table
+    public TableView<Transaction> tableview = new TableView<>(); // this is read-only UI table
     @FXML
     private TableColumn<Transaction, String> from;
     @FXML
@@ -82,7 +82,7 @@ public class MainWindowController {
         }
         newTransactionController.getDialogPane().getButtonTypes().add(ButtonType.FINISH);
         Optional<ButtonType> result = newTransactionController.showAndWait();
-        if (result.isPresent() ) {
+        if (result.isPresent()) {
             tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
             eCoins.setText(BlockchainData.getInstance().getWalletBalance());
         }
