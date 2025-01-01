@@ -6,7 +6,6 @@
 
 /* MenuBar Styling */
 .menu-bar {
-    -fx-background-color: #344955; /* Dark navy background */
     -fx-text-fill: #ffffff;
     -fx-font-size: 14px;
     -fx-padding: 5 10;

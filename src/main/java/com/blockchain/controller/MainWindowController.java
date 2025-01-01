@@ -4,14 +4,22 @@ import com.blockchain.model.Transaction;
 import com.blockchain.service.BlockchainData;
 import com.blockchain.service.WalletData;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import com.blockchain.dao.*;
+import com.blockchain.dao.impl.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 public class MainWindowController {
@@ -36,21 +44,27 @@ public class MainWindowController {
     private TextArea publicKey;
 
     public void initialize() {
-        Base64.Encoder encoder = Base64.getEncoder();
-        from.setCellValueFactory(
-                new PropertyValueFactory<>("fromFX"));
-        to.setCellValueFactory(
-                new PropertyValueFactory<>("toFX"));
-        value.setCellValueFactory(
-                new PropertyValueFactory<>("value"));
-        signature.setCellValueFactory(
-                new PropertyValueFactory<>("signatureFX"));
-        createdOn.setCellValueFactory(
-                new PropertyValueFactory<>("createdOn"));
-//        eCoins.setText(BlockchainData.getInstance().getWalletBalance());
-//        publicKey.setText(encoder.encodeToString(WalletData.getInstance().getWallet().getPublicKey().getEncoded()));
-//        tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
-        tableview.getSelectionModel().select(0);
+ 
+        from.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFromFX()));
+        to.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getToFX()));
+        value.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getValue()));
+        signature.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getSignatureFX()));
+        createdOn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTimestamp()));
+
+        List<Transaction> transactions = new ArrayList<>();
+        TransactionDAO tdi = new TransactionDAOImpl();
+        try {
+            transactions = tdi.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        ObservableList<Transaction> transactionList = FXCollections.observableArrayList(transactions);
+        tableview.setItems(transactionList);
+
+        if (!transactionList.isEmpty()) {
+            tableview.getSelectionModel().select(0);
+        }
     }
 
     @FXML

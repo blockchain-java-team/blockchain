@@ -66,6 +66,7 @@ public class BlockchainData {
 
     public BlockchainData() throws NoSuchAlgorithmException {
         this.newBlockTransactions = new ArrayList<>();
+        this.newBlockTransactionsFX = FXCollections.observableArrayList();
     }
 
     public String getWalletBalance() {
@@ -240,9 +241,13 @@ public class BlockchainData {
  * which notifies JavaFX UI components of any changes
  */
     public ObservableList<Transaction> getTransactionLedgerFX() {
-        newBlockTransactionsFX.clear();
+       newBlockTransactionsFX.clear();
+
+    	
         newBlockTransactions.sort(transactionComparator);
         newBlockTransactionsFX.addAll(newBlockTransactions);
+        System.out.println(newBlockTransactionsFX);
+    	System.out.println(newBlockTransactions);
         return FXCollections.observableArrayList(newBlockTransactionsFX);
     }
 

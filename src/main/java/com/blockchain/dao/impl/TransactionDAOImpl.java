@@ -68,8 +68,7 @@ public class TransactionDAOImpl implements TransactionDAO {
                             rs.getInt("VALUE"),
                             rs.getBytes("SIGNATURE"),
                             rs.getInt("LEDGER_ID"),
-                            rs.getString("CREATED_ON")
-                    );
+                            rs.getString("CREATED_ON"));
                 }
             }
         }
