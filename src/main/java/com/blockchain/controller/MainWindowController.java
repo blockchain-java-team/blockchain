@@ -17,7 +17,7 @@ import java.util.Optional;
 public class MainWindowController {
 
     @FXML
-    public TableView<Transaction> tableview = new TableView<>(); //this is read-only UI table
+    public TableView<Transaction> tableview = new TableView<>(); // this is read-only UI table
     @FXML
     private TableColumn<Transaction, String> from;
     @FXML
@@ -37,20 +37,16 @@ public class MainWindowController {
 
     public void initialize() {
         Base64.Encoder encoder = Base64.getEncoder();
-        from.setCellValueFactory(
-                new PropertyValueFactory<>("fromFX"));
-        to.setCellValueFactory(
-                new PropertyValueFactory<>("toFX"));
-        value.setCellValueFactory(
-                new PropertyValueFactory<>("value"));
-        signature.setCellValueFactory(
-                new PropertyValueFactory<>("signatureFX"));
-        createdOn.setCellValueFactory(
-                new PropertyValueFactory<>("createdOn"));
-//        eCoins.setText(BlockchainData.getInstance().getWalletBalance());
-//        publicKey.setText(encoder.encodeToString(WalletData.getInstance().getWallet().getPublicKey().getEncoded()));
-//        tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
-        tableview.getSelectionModel().select(0);
+        from.setCellValueFactory(new PropertyValueFactory<>("fromFX"));
+        to.setCellValueFactory(new PropertyValueFactory<>("toFX"));
+        value.setCellValueFactory(new PropertyValueFactory<>("value"));
+        signature.setCellValueFactory(new PropertyValueFactory<>("signatureFX"));
+        createdOn.setCellValueFactory(new PropertyValueFactory<>("createdOn"));
+
+        eCoins.setText(BlockchainData.getInstance().getWalletBalance());
+        publicKey.setText(encoder.encodeToString(WalletData.getInstance().getWallet().getPublicKey().getEncoded()));
+        // tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
+        // tableview.getSelectionModel().select(0);
     }
 
     @FXML
@@ -68,7 +64,7 @@ public class MainWindowController {
         }
         newTransactionController.getDialogPane().getButtonTypes().add(ButtonType.FINISH);
         Optional<ButtonType> result = newTransactionController.showAndWait();
-        if (result.isPresent() ) {
+        if (result.isPresent()) {
             tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
             eCoins.setText(BlockchainData.getInstance().getWalletBalance());
         }

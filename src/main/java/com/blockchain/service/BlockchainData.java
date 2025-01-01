@@ -1,5 +1,6 @@
 package com.blockchain.service;
 
+import com.blockchain.dao.impl.TransactionDAOImpl;
 import com.blockchain.helpers.Utils;
 import com.blockchain.model.Block;
 import com.blockchain.model.Transaction;
@@ -20,8 +21,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /**
- * Blockchain's Reward Transaction create new coins (from nothing) and aware them to the miner that mines that block.
- * We are america btw.
+ * Blockchain's Reward Transaction create new coins (from nothing) and aware
+ * them to the miner that mines that block. We are america btw.
  */
 public class BlockchainData {
     @Getter
@@ -46,15 +47,14 @@ public class BlockchainData {
     // helper
     private Signature signing = Signature.getInstance("SHA256withDSA");
     /**
-     * List of Transactions before block finalization.
-     * Which means before mining the Block.
-     * represent the current ledger of our blockchain
+     * List of Transactions before block finalization. Which means before mining the
+     * Block. represent the current ledger of our blockchain
      */
     private List<Transaction> newBlockTransactions;
     private ObservableList<Transaction> newBlockTransactionsFX;
 
     /**
-     * current blockchain. The blockchain in this attribute
+     * current blockchain.
      */
     @Getter
     private LinkedList<Block> currentBlockChain = new LinkedList<>();
@@ -69,35 +69,46 @@ public class BlockchainData {
     }
 
     public String getWalletBalance() {
-        return getBalance(currentBlockChain, newBlockTransactions,
-                WalletData.getInstance().getWallet().getPublicKey()).toString();
+        System.out.println("currentBlockchain: " + currentBlockChain.size());
+        System.out.println("newBlockTransactions: " + newBlockTransactions.size());
+        return getBalance(currentBlockChain, newBlockTransactions, WalletData.getInstance().getWallet().getPublicKey())
+                .toString();
     }
 
     /**
-     * Calculate the Wallet Balance using UTXO
-     * <br>
-     * To prevent double spending we also need to subtract any funds we
-     * are already trying to send that exist in the current transaction ledger.
+     * Calculate the Wallet Balance using UTXO <br>
+     * To prevent double spending we also need to subtract any funds we are already
+     * trying to send that exist in the current transaction ledger.
      *
      * @param blockChain    current blockchain
      * @param currentLedger List of the current Block's Transactions, Not mined
      * @param walletAddress {@link PublicKey} of the current wallet
      * @return your balance
      */
-    private Integer getBalance(
-            LinkedList<Block> blockChain,
-            List<Transaction> currentLedger, PublicKey walletAddress) {
+    private Integer getBalance(LinkedList<Block> blockChain, List<Transaction> currentLedger, PublicKey walletAddress) {
         Integer balance = 0;
+        // System.out.println("Wallet Address: " + walletAddress.toString());
+        int i = 0;
         for (Block block : blockChain) {
+            System.out.println(i++);
+            // transaction ledger size
+            System.out.println("Block Transactions: " + block.getTransactionLedger().size());
+            // System.out.println("Block: " + block.getLedgerId());
+            // System.out.println("Block Transactions: " +
+            // block.getTransactionLedger().size());
             for (Transaction transaction : block.getTransactionLedger()) {
+                System.out.println("Value: " + transaction.getValue());
                 if (Arrays.equals(transaction.getFrom(), walletAddress.getEncoded())) {
                     balance -= transaction.getValue();
                 }
+                System.out.println("In after -: blance: " + balance);
                 if (Arrays.equals(transaction.getTo(), walletAddress.getEncoded())) {
                     balance += transaction.getValue();
                 }
+                System.out.println("In after +: blance: " + balance);
             }
         }
+        System.out.println("Currnet blance after currentBlockchain looping: " + balance);
         for (Transaction transaction : currentLedger) {
             if (Arrays.equals(transaction.getFrom(), walletAddress.getEncoded())) {
                 balance -= transaction.getValue();
@@ -110,11 +121,13 @@ public class BlockchainData {
      * add a new transaction to our ledger.
      *
      * @param transaction the transaction you want to add
-     * @param blockReward is a reward transaction for the miner (true), regular transaction(false)
+     * @param blockReward is a reward transaction for the miner (true), regular
+     *                    transaction(false)
      * @throws Exception
      */
     public void addTransaction(Transaction transaction, boolean blockReward) throws Exception {
-        Integer current_balance = getBalance(currentBlockChain, newBlockTransactions, Utils.byteArrayToPublicKey(transaction.getFrom()));
+        Integer current_balance = getBalance(currentBlockChain, newBlockTransactions,
+                Utils.byteArrayToPublicKey(transaction.getFrom()));
         boolean isRegularTransaction = !blockReward;
 
         if (isRegularTransaction && current_balance < transaction.getValue()) {
@@ -141,14 +154,10 @@ public class BlockchainData {
     }
 
     /**
-     * preparing/finalizing our latestBlock.
-     * <br>
-     * Reinitialize mining points,
-     * we add the reward
-     * transaction of the block we just finalized to the database since until now
-     * we have kept it only in the newBlockTransactions list, which we copied in
-     * our lastestBlock.
-     * <br>
+     * preparing/finalizing our latestBlock. <br>
+     * Reinitialize mining points, we add the reward transaction of the block we
+     * just finalized to the database since until now we have kept it only in the
+     * newBlockTransactions list, which we copied in our lastestBlock. <br>
      * We reward the miner of block A in block B (A -> B)
      *
      * @param minersWallet
@@ -165,18 +174,19 @@ public class BlockchainData {
         signing.update(latestBlock.toString().getBytes());
         latestBlock.setCurrHash(signing.sign());
 
-        // we include the latestBlock into our CurrentBlockChain since we have finalized it completely.
+        // we include the latestBlock into our CurrentBlockChain since we have finalized
+        // it completely.
         currentBlockChain.add(latestBlock);
 
         miningPoints = 0;
 
-        //Reward transaction
+        // Reward transaction
         latestBlock.getTransactionLedger().sort(transactionComparator);
 
         addTransaction(latestBlock.getTransactionLedger().getFirst(), true);
 
-        Transaction transaction = new Transaction(new Wallet(), minersWallet.getPublicKey().getEncoded(),
-                100, latestBlock.getLedgerId() + 1, signing);
+        Transaction transaction = new Transaction(new Wallet(), minersWallet.getPublicKey().getEncoded(), 100,
+                latestBlock.getLedgerId() + 1, signing);
         newBlockTransactions.clear();
         newBlockTransactions.add(transaction);
     }
@@ -191,8 +201,8 @@ public class BlockchainData {
     }
 
     /**
-     * used whenever we want to load the whole blockchain from
-     * our database and set up the state of the app accordingly
+     * used whenever we want to load the whole blockchain from our database and set
+     * up the state of the app accordingly
      */
     public void loadBlockChain() throws Exception {
 
@@ -202,15 +212,16 @@ public class BlockchainData {
         latestBlock = currentBlockChain.getLast();
 
         // reward transaction
-        Transaction transaction = new Transaction(
-                new Wallet(),
-                WalletData.getInstance().getWallet().getPublicKey().getEncoded(),
-                100, latestBlock.getLedgerId() + 1, signing
-        );
+        Transaction transaction = new Transaction(new Wallet(),
+                WalletData.getInstance().getWallet().getPublicKey().getEncoded(), 100, latestBlock.getLedgerId() + 1,
+                signing);
 
         newBlockTransactions.clear();
         newBlockTransactions.add(transaction);
         verifyBlockChain(currentBlockChain);
+        System.out.println("CurrentBlockChain: " + currentBlockChain.size());
+        System.out.println("newBlockTransactions: " + newBlockTransactions.size());
+        System.out.println("verifid");
     }
 
     /**
@@ -225,7 +236,7 @@ public class BlockchainData {
             if (Boolean.FALSE.equals(block.isVerified(signing))) {
                 throw new GeneralSecurityException("Block validation failed");
             }
-            ArrayList<Transaction> transactions = block.getTransactionLedger();
+            List<Transaction> transactions = block.getTransactionLedger();
             for (Transaction transaction : transactions) {
                 if (Boolean.FALSE.equals(transaction.isVerified(signing))) {
                     throw new GeneralSecurityException("Transaction validation failed");
@@ -234,11 +245,12 @@ public class BlockchainData {
         }
     }
 
-/**
- * This method prepares and returns a sorted, up-to-date list of transactions that the UI can observe and display.
- * FXCollections.observableArrayList: Wraps the newBlockTransactionsFX into an ObservableList,
- * which notifies JavaFX UI components of any changes
- */
+    /**
+     * This method prepares and returns a sorted, up-to-date list of transactions
+     * that the UI can observe and display. FXCollections.observableArrayList: Wraps
+     * the newBlockTransactionsFX into an ObservableList, which notifies JavaFX UI
+     * components of any changes
+     */
     public ObservableList<Transaction> getTransactionLedgerFX() {
         newBlockTransactionsFX.clear();
         newBlockTransactions.sort(transactionComparator);

@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-
 public class BlockDAOImpl implements BlockDAO {
 
     @Getter
@@ -23,7 +22,7 @@ public class BlockDAOImpl implements BlockDAO {
     public void save(Block block) throws Exception {
         String query = "INSERT INTO BLOCKS (ID, PREVIOUS_HASH, CURRENT_HASH, LEDGER_ID, CREATED_ON, CREATED_BY, MININGS_POINTS, LUCK) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, block.getLedgerId());
             stmt.setBytes(2, block.getPrevHash());
@@ -43,20 +42,15 @@ public class BlockDAOImpl implements BlockDAO {
         List<Block> blocks = new ArrayList<>();
         String query = "SELECT * FROM BLOCKS";
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(query)) {
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(query)) {
 
             while (rs.next()) {
-                blocks.add(new Block(
-                        rs.getBytes("PREVIOUS_HASH"),
-                        rs.getBytes("CURRENT_HASH"),
-                        rs.getString("CREATED_ON"),
-                        rs.getBytes("CREATED_BY"),
-                        rs.getInt("LEDGER_ID"),
-                        rs.getInt("MININGS_POINTS"),
-                        rs.getDouble("LUCK"),
-                        new ArrayList<>() // Placeholder for transaction ledger
-                ));
+                // get all transactions for this block
+                List<Transaction> transactions = new TransactionDAOImpl().findByLedgerId(rs.getInt("LEDGER_ID"));
+                blocks.add(new Block(rs.getBytes("PREVIOUS_HASH"), rs.getBytes("CURRENT_HASH"),
+                        rs.getString("CREATED_ON"), rs.getBytes("CREATED_BY"), rs.getInt("LEDGER_ID"),
+                        rs.getInt("MININGS_POINTS"), rs.getDouble("LUCK"), transactions));
             }
         }
         return blocks;
@@ -66,20 +60,15 @@ public class BlockDAOImpl implements BlockDAO {
     public Block findById(int id) throws Exception {
         String query = "SELECT * FROM BLOCKS WHERE ID = ?";
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
 
             stmt.setInt(1, id);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return new Block(
-                            rs.getBytes("PREVIOUS_HASH"),
-                            rs.getBytes("CURRENT_HASH"),
-                            rs.getString("CREATED_ON"),
-                            rs.getBytes("CREATED_BY"),
-                            rs.getInt("LEDGER_ID"),
-                            rs.getInt("MININGS_POINTS"),
-                            rs.getDouble("LUCK"),
-                            new ArrayList<>() // Placeholder for transaction ledger
+                    return new Block(rs.getBytes("PREVIOUS_HASH"), rs.getBytes("CURRENT_HASH"),
+                            rs.getString("CREATED_ON"), rs.getBytes("CREATED_BY"), rs.getInt("LEDGER_ID"),
+                            rs.getInt("MININGS_POINTS"), rs.getDouble("LUCK"), new ArrayList<>() // Placeholder for
+                                                                                                 // transaction ledger
                     );
                 }
             }
@@ -91,14 +80,14 @@ public class BlockDAOImpl implements BlockDAO {
     public void deleteById(int id) throws Exception {
         String query = "DELETE FROM BLOCKS WHERE ID = ?";
         try (Connection conn = DatabaseConnection.getConnection(DB_URL);
-             PreparedStatement stmt = conn.prepareStatement(query)) {
+                PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, id);
             stmt.executeUpdate();
         }
     }
 
     @Override
-    public void replaceBlockchainInDatabase(List<Block> receivedBC){
+    public void replaceBlockchainInDatabase(List<Block> receivedBC) {
         try {
             Connection connection = DriverManager.getConnection(DB_URL);
             Statement clearDBStatement = connection.createStatement();
@@ -123,5 +112,5 @@ public class BlockDAOImpl implements BlockDAO {
             throw new RuntimeException(e);
         }
     }
-    
+
 }
