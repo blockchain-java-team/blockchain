@@ -15,7 +15,6 @@ import lombok.Getter;
 import java.security.Signature;
 import java.time.LocalDateTime;
 
-
 @Getter
 public class EnsaChain extends Application {
     public static void main(String[] args) throws Exception {
@@ -30,7 +29,7 @@ public class EnsaChain extends Application {
 
     @Override
     public void init() throws Exception {
-        if (BlockchainState.wallets.isEmpty()) {
+        if (BlockchainState.getWallets().isEmpty()) {
             Wallet newWallet = new Wallet();
             BlockchainState.addWallet(newWallet);
         }
@@ -55,8 +54,7 @@ public class EnsaChain extends Application {
             initBlockRewardTransaction = new Transaction(
                     WalletData.getInstance().getWallet(),
                     WalletData.getInstance().getWallet().getPublicKey().getEncoded(),
-                    100, 1, transSignature
-            );
+                    100, 1, transSignature);
 
             BlockchainData.getInstance().addTransaction(initBlockRewardTransaction, true);
             BlockchainData.getInstance().addTransactionState(initBlockRewardTransaction);
