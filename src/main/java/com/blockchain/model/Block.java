@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
@@ -15,7 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 
-public class Block {
+public class Block implements Serializable {
     /**
      * The field prevHash will contain the signature or, in other words, the
      * encrypted data from the previous block.

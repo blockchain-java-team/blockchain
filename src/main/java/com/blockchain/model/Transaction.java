@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
@@ -12,7 +13,7 @@ import java.util.Arrays;
 import java.util.Base64;
 
 @Getter
-public class Transaction {
+public class Transaction implements Serializable {
 
     /**
      * public keys/addresses of the account that sends
