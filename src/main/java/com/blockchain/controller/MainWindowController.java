@@ -44,7 +44,7 @@ public class MainWindowController {
     private TextArea publicKey;
 
     public void initialize() {
-
+ 
         from.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getFromFX()));
         to.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getToFX()));
         value.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getValue()));
@@ -81,6 +81,7 @@ public class MainWindowController {
             return;
         }
         newTransactionController.getDialogPane().getButtonTypes().add(ButtonType.FINISH);
+        newTransactionController.getDialogPane().lookupButton(ButtonType.FINISH).setVisible(false);
         Optional<ButtonType> result = newTransactionController.showAndWait();
         if (result.isPresent()) {
             tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
