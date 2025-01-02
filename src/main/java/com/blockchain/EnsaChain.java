@@ -7,6 +7,9 @@ import com.blockchain.service.WalletData;
 import com.blockchain.service.BlockchainData;
 import com.blockchain.state.BlockchainState;
 import com.blockchain.threads.MiningThread;
+import com.blockchain.threads.PeerClient;
+import com.blockchain.threads.PeerRequestThread;
+import com.blockchain.threads.PeerServer;
 import com.blockchain.threads.UI;
 
 import javafx.application.Application;
@@ -25,6 +28,8 @@ public class EnsaChain extends Application {
     public void start(Stage primaryStage) throws Exception {
         new UI().start(primaryStage);
         new MiningThread().start();
+        new PeerClient().start();
+        new PeerServer(5000); // port 5000
     }
 
     @Override
