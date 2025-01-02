@@ -82,10 +82,6 @@ public class MainWindowController {
         }
         newTransactionController.getDialogPane().getButtonTypes().add(ButtonType.FINISH);
         newTransactionController.getDialogPane().lookupButton(ButtonType.FINISH).setVisible(false);
-//
-//        ButtonType dummyButton = new ButtonType("Dummy", ButtonBar.ButtonData.CANCEL_CLOSE);
-//        newTransactionController.getDialogPane().getButtonTypes().add(dummyButton);
-//        newTransactionController.getDialogPane().lookupButton(dummyButton).setVisible(false);
         Optional<ButtonType> result = newTransactionController.showAndWait();
         if (result.isPresent()) {
             tableview.setItems(BlockchainData.getInstance().getTransactionLedgerFX());
