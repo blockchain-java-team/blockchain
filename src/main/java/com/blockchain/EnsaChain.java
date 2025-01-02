@@ -28,8 +28,8 @@ public class EnsaChain extends Application {
     public void start(Stage primaryStage) throws Exception {
         new UI().start(primaryStage);
         new MiningThread().start();
+        new PeerServer(5000).start(); // port 5000
         new PeerClient().start();
-        new PeerServer(5000); // port 5000
     }
 
     @Override

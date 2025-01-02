@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -24,19 +25,31 @@ public class PeerClient extends Thread {
      * Store the port numbers of the peers we want to connect to
      */
     private Queue<Integer> ports = new ConcurrentLinkedDeque<>();
+    Socket socket = null;
 
     public PeerClient() {
-        this.ports.add(6001);
-        this.ports.add(6002);
+        this.ports.add(5001);
+        //this.ports.add(5001);
     }
 
     @Override
     public void run() {
+        //while(true){
+            //try (Socket socket = new Socket("127.0.0.1", 5000)) {
+                //System.out.println("\n\n\n");
+                //System.out.println("you did connect, congratulation!!!");
+                //System.out.println("\n\n\n");
+                
+            //} catch (Exception e) {
+                //// TODO: handle exception
+            //}
+        //}
+
         while (true) {
-            try (Socket socket = new Socket("127.0.0.1", ports.peek())) {
-                System.out.println("Sending blockchain object on port: " + ports.peek());
-                ports.add(ports.poll()); // move the head to the tail
-                socket.setSoTimeout(5000);
+            try (Socket socket = new Socket("127.0.0.1", 5001)) {
+                System.out.println("Sending blockchain object on port: " + 5001);
+                //ports.add(ports.poll()); // move the head to the tail
+                //socket.setSoTimeout(5000);
 
                 ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
