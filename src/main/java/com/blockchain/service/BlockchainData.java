@@ -28,9 +28,9 @@ import java.util.*;
  */
 public class BlockchainData {
     @Getter
-    private static final int TIMEOUT_INTERVAL = 15; // todo: return it to 65
+    private static final int TIMEOUT_INTERVAL = 65;
     @Getter
-    private static final int MINING_INTERVAL = 10; // todo: should be 60
+    private static final int MINING_INTERVAL = 60;
     @Getter
     private static BlockchainData instance;
 
