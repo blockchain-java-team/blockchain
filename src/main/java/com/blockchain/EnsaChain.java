@@ -1,14 +1,68 @@
 package com.blockchain;
 
-import lombok.Getter;
+import com.blockchain.model.Block;
+import com.blockchain.model.Transaction;
+import com.blockchain.model.Wallet;
+import com.blockchain.service.WalletData;
+import com.blockchain.service.BlockchainData;
+import com.blockchain.state.BlockchainState;
+import com.blockchain.threads.MiningThread;
+import com.blockchain.threads.PeerClient;
+import com.blockchain.threads.PeerRequestThread;
+import com.blockchain.threads.PeerServer;
+import com.blockchain.threads.UI;
 
-/**
- * @author khabir
- **/
+import javafx.application.Application;
+import javafx.stage.Stage;
+import lombok.Getter;
+import java.security.Signature;
+import java.time.LocalDateTime;
+
 @Getter
-public class EnsaChain {
-    private int num;
-    public int hash() {
-        return 123;
+public class EnsaChain extends Application {
+    public static void main(String[] args) throws Exception {
+        launch(args); // calls the start method
+    }
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        new UI().start(primaryStage);
+        new MiningThread().start();
+        new PeerServer(5000).start(); // port 5000
+        new PeerClient().start();
+    }
+
+    @Override
+    public void init() throws Exception {
+        if (BlockchainState.getWallets().isEmpty()) {
+            Wallet newWallet = new Wallet();
+            BlockchainState.addWallet(newWallet);
+        }
+
+        WalletData.getInstance().loadWallet();
+
+        Signature transSignature = Signature.getInstance("SHA256withDSA");
+
+        Transaction initBlockRewardTransaction = null;
+        if (BlockchainState.getBlocks().isEmpty()) {
+            Block firstBlock = new Block();
+            firstBlock.setMinedBy(WalletData.getInstance().getWallet().getPublicKey().getEncoded());
+            firstBlock.setTimeStamp(LocalDateTime.now().toString());
+
+            Signature signing = Signature.getInstance("SHA256withDSA");
+            signing.initSign(WalletData.getInstance().getWallet().getPrivateKey());
+            signing.update(firstBlock.toString().getBytes());
+            firstBlock.setCurrHash(signing.sign());
+
+            BlockchainState.addBlock(firstBlock);
+
+            initBlockRewardTransaction = new Transaction(WalletData.getInstance().getWallet(),
+                    WalletData.getInstance().getWallet().getPublicKey().getEncoded(), 100, 1, transSignature);
+
+            BlockchainData.getInstance().addTransaction(initBlockRewardTransaction, true);
+            BlockchainData.getInstance().addTransactionState(initBlockRewardTransaction);
+        }
+
+        BlockchainData.getInstance().loadBlockChain();
     }
 }

@@ -1,0 +1,79 @@
+/* General Styling for BorderPane */
+.root {
+    -fx-background-color: #f7f9fc; /* Soft light background */
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+/* MenuBar Styling */
+.menu-bar {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-padding: 5 10;
+}
+
+.menu-title {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+.menu-item {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333333;
+}
+
+/* TableView Styling */
+.center-table {
+    -fx-background-color: white;
+    -fx-border-color: #d1d9e6;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+    -fx-padding: 10;
+}
+
+.table-column {
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+}
+
+/* Labels */
+.label-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #344955; /* Navy color */
+}
+
+/* Input Fields */
+.input-field, .textarea-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #d1d9e6;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 5px;
+    -fx-font-size: 14px;
+}
+
+/* Button Styling */
+.refresh-button {
+    -fx-background-color: #4CAF50; /* Vibrant green */
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-padding: 8px 15px;
+    -fx-cursor: hand;
+}
+
+.refresh-button:hover {
+    -fx-background-color: #45a049; /* Darker green */
+}
+
+/* Bottom Pane */
+.bottom-pane {
+    -fx-background-color: #e8eef5; /* Subtle grey-blue for separation */
+    -fx-padding: 10;
+    -fx-border-color: #d1d9e6;
+    -fx-border-width: 1px 0 0 0;
+}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<DialogPane  prefHeight="266.0" prefWidth="667.0" stylesheets="@AddNewTransactionWindowStyle.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.blockchain.controller.AddNewTransactionController">
+    <content>
+        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="250.0" prefWidth="657.0">
+            <children>
+                <!-- Title Label -->
+                <Label layoutX="14.0" layoutY="14.0" styleClass="dialog-title" text="Add New Transaction" />
+
+                <!-- Labels -->
+                <Label layoutX="14.0" layoutY="90.0" styleClass="dialog-label" text="To Address" />
+                <Label layoutX="340.0" layoutY="90.0" styleClass="dialog-label" text="Amount" />
+
+                <!-- Input Fields -->
+                <TextField fx:id="toAddress" layoutX="14.0" layoutY="110.0" prefHeight="32.0" prefWidth="291.0" styleClass="dialog-input" />
+                <TextField fx:id="value" layoutX="340.0" layoutY="110.0" prefWidth="150.0" styleClass="dialog-input" />
+
+                <!-- Send Button -->
+                <Button layoutX="450.0" layoutY="180.0" mnemonicParsing="false" styleClass="dialog-button" text="Send Transaction" onAction="#createNewTransaction"/>
+            </children>
+        </AnchorPane>
+    </content>
+</DialogPane>
