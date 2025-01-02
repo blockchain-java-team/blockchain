@@ -18,7 +18,7 @@ public class UI extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.setTitle("E-Coin");
+        stage.setTitle("ENSACHAIN");
         stage.setScene(new Scene(root, 900, 700));
         stage.show();
     }
