@@ -49,24 +49,32 @@ public class PeerClient extends Thread {
             try (Socket socket = new Socket("127.0.0.1", 5001)) {
                 System.out.println("Sending blockchain object on port: " + 5001);
                 //ports.add(ports.poll()); // move the head to the tail
-                //socket.setSoTimeout(5000);
+                socket.setSoTimeout(5000);
 
                 ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
                 ObjectInputStream objectInput = new ObjectInputStream(socket.getInputStream());
 
+                ObjectMapper mapper = new ObjectMapper();
                 // send the blockchain
                 LinkedList<Block> blockChain = BlockchainData.getInstance().getCurrentBlockChain();
+                System.out.println("-----------------------------------------------------------------------");
+                System.out.println("this is the blockchain" + blockChain.size());
+                System.out.println("-----------------------------------------------------------------------");
                 objectOutput.writeObject(blockChain);
+                //objectOutput.writeObject(mapper.writeValueAsString(blockChain));
+                System.out.println(mapper.writeValueAsString(blockChain));
 
-                ObjectMapper mapper = new ObjectMapper();
-                LinkedList<Block> returnedBlockchain = mapper.readValue(objectInput.readObject().toString(),
-                        new TypeReference<LinkedList<Block>>() {
-                        });
+                //LinkedList<Block> returnedBlockchain = mapper.readValue(objectInput.readObject().toString(),
+                        //new TypeReference<LinkedList<Block>>() {
+                        //});
+
+
+                LinkedList<Block> returnedBlockchain = (LinkedList<Block>) objectInput.readObject() ;
 
                 System.out.println(" RETURNED BC LedgerId = " + returnedBlockchain.getLast().getLedgerId() +
                         " Size= " + returnedBlockchain.getLast().getTransactionLedger().size());
                 BlockchainData.getInstance().getBlockchainConsensus(returnedBlockchain);
-                Thread.sleep(2000);
+                Thread.sleep(5000);
 
             } catch (SocketTimeoutException e) {
                 System.out.println("The socket timed out");
