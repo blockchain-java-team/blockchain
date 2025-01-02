@@ -38,10 +38,7 @@ public class MiningThread extends Thread {
                 } catch (Exception e) {
                     System.out.println("Can't min the current block");
                 }
-                // System.out.println("Your balance in else is " +
-                // BlockchainData.getInstance().getWalletBalance());
             }
-            System.out.println("\n\nbegin calling getBalance");
             System.out.println("Your balance is " + BlockchainData.getInstance().getWalletBalance());
 
             try {

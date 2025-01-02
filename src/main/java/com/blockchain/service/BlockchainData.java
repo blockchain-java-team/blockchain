@@ -73,8 +73,6 @@ public class BlockchainData {
     }
 
     public String getWalletBalance() {
-        System.out.println("currentBlockchain: " + currentBlockChain.size());
-        System.out.println("newBlockTransactions: " + newBlockTransactions.size());
         return getBalance(currentBlockChain, newBlockTransactions, WalletData.getInstance().getWallet().getPublicKey())
                 .toString();
     }
@@ -91,28 +89,16 @@ public class BlockchainData {
      */
     private Integer getBalance(LinkedList<Block> blockChain, List<Transaction> currentLedger, PublicKey walletAddress) {
         Integer balance = 0;
-        // System.out.println("Wallet Address: " + walletAddress.toString());
-        int i = 0;
         for (Block block : blockChain) {
-            System.out.println(i++);
-            // transaction ledger size
-            System.out.println("Block Transactions: " + block.getTransactionLedger().size());
-            // System.out.println("Block: " + block.getLedgerId());
-            // System.out.println("Block Transactions: " +
-            // block.getTransactionLedger().size());
             for (Transaction transaction : block.getTransactionLedger()) {
-                System.out.println("Value: " + transaction.getValue());
                 if (Arrays.equals(transaction.getFrom(), walletAddress.getEncoded())) {
                     balance -= transaction.getValue();
                 }
-                System.out.println("In after -: blance: " + balance);
                 if (Arrays.equals(transaction.getTo(), walletAddress.getEncoded())) {
                     balance += transaction.getValue();
                 }
-                System.out.println("In after +: blance: " + balance);
             }
         }
-        System.out.println("Currnet blance after currentBlockchain looping: " + balance);
         for (Transaction transaction : currentLedger) {
             if (Arrays.equals(transaction.getFrom(), walletAddress.getEncoded())) {
                 balance -= transaction.getValue();
@@ -223,9 +209,6 @@ public class BlockchainData {
         newBlockTransactions.clear();
         newBlockTransactions.add(transaction);
         verifyBlockChain(currentBlockChain);
-        System.out.println("CurrentBlockChain: " + currentBlockChain.size());
-        System.out.println("newBlockTransactions: " + newBlockTransactions.size());
-        System.out.println("verifid");
     }
 
     /**
@@ -256,13 +239,9 @@ public class BlockchainData {
      * components of any changes
      */
     public ObservableList<Transaction> getTransactionLedgerFX() {
-       newBlockTransactionsFX.clear();
-
-    	
+        newBlockTransactionsFX.clear();
         newBlockTransactions.sort(transactionComparator);
         newBlockTransactionsFX.addAll(newBlockTransactions);
-        System.out.println(newBlockTransactionsFX);
-    	System.out.println(newBlockTransactions);
         return FXCollections.observableArrayList(newBlockTransactionsFX);
     }
 
