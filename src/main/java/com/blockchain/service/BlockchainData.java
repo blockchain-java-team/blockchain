@@ -90,15 +90,20 @@ public class BlockchainData {
     private Integer getBalance(LinkedList<Block> blockChain, List<Transaction> currentLedger, PublicKey walletAddress) {
         Integer balance = 0;
         for (Block block : blockChain) {
+
             for (Transaction transaction : block.getTransactionLedger()) {
+
                 if (Arrays.equals(transaction.getFrom(), walletAddress.getEncoded())) {
                     balance -= transaction.getValue();
                 }
+                //System.out.println("In after -: blance: " + balance);
                 if (Arrays.equals(transaction.getTo(), walletAddress.getEncoded())) {
                     balance += transaction.getValue();
                 }
+                //System.out.println("In after +: blance: " + balance);
             }
         }
+        //System.out.println("Currnet blance after currentBlockchain looping: " + balance);
         for (Transaction transaction : currentLedger) {
             if (Arrays.equals(transaction.getFrom(), walletAddress.getEncoded())) {
                 balance -= transaction.getValue();
