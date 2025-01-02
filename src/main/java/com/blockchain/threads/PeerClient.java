@@ -54,7 +54,7 @@ public class PeerClient extends Thread {
                 System.out.println(" RETURNED BC LedgerId = " + returnedBlockchain.getLast().getLedgerId() +
                         " Size= " + returnedBlockchain.getLast().getTransactionLedger().size());
                 BlockchainData.getInstance().getBlockchainConsensus(returnedBlockchain);
-                Thread.sleep(5000);
+                Thread.sleep(2000);
 
             } catch (SocketTimeoutException e) {
                 System.out.println("The socket timed out");
